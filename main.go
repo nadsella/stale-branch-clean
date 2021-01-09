@@ -37,14 +37,17 @@ func main() {
 }
 
 func login() (bool, error) {
-	u := fmt.Sprintf("nadsella:%s", os.Getenv("STALE_BRANCH_TOKEN"))
+	g := os.Getenv("GITHUB_USERNAME")
+	api := fmt.Sprintf("%s/%s", "https://api.github.com/users", g)
+
+	u := fmt.Sprintf("%s:%s", g, os.Getenv("STALE_BRANCH_TOKEN"))
 	requestBody, err := json.Marshal(u)
 
 	if err != nil {
 		log.Fatalln(err)
 	}
 
-	resp, err := http.Post("https://api.github.com/users/nadsella", "application/json", bytes.NewBuffer(requestBody))
+	resp, err := http.Post(api, "application/json", bytes.NewBuffer(requestBody))
 
 	if err != nil {
 		log.Fatalln(err)
