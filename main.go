@@ -1,10 +1,7 @@
 package main
 
 import (
-	"bytes"
-	"encoding/json"
 	"fmt"
-	"io/ioutil"
 	"log"
 	"net/http"
 	"os"
@@ -18,7 +15,13 @@ func main() {
 	//add skip message to log if branch doesn't need deleting
 	//write go test for testing this
 
-	login()
+	l, err := auth()
+
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	fmt.Printf("%v", l)
 	// resp, err := http.Get("https://httpbin.org/get")
 
 	// if err != nil {
@@ -36,32 +39,33 @@ func main() {
 	// log.Println(string(body))
 }
 
-func login() (bool, error) {
+func auth() (bool, error) {
 	g := os.Getenv("GITHUB_USERNAME")
 	api := fmt.Sprintf("%s/%s", "https://api.github.com/users", g)
 
-	u := fmt.Sprintf("%s:%s", g, os.Getenv("STALE_BRANCH_TOKEN"))
-	requestBody, err := json.Marshal(u)
+	req, err := http.NewRequest("GET", api, nil)
 
 	if err != nil {
 		log.Fatalln(err)
+		return false, nil
 	}
 
-	resp, err := http.Post(api, "application/json", bytes.NewBuffer(requestBody))
+	//basic auth with personal token
+	req.SetBasicAuth(g, os.Getenv("STALE_BRANCH_TOKEN"))
+
+	resp, err := http.DefaultClient.Do(req)
 
 	if err != nil {
 		log.Fatalln(err)
+		return false, nil
 	}
 
 	defer resp.Body.Close()
 
-	body, err := ioutil.ReadAll(resp.Body)
-
 	if err != nil {
 		log.Fatalln(err)
+		return false, nil
 	}
-
-	log.Println(string(body))
 
 	return true, nil
 }
