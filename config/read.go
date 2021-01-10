@@ -3,33 +3,40 @@ package config
 import (
 	"fmt"
 
-	"github.com/BurntSushi/toml"
+	"github.com/spf13/viper"
 )
 
-type tomlConfig struct {
-	Title     string
-	Endpoints endpoints
+type endpointResponse struct {
+	Endpoints endpoint
 }
 
-type endpoints struct {
-	Code       string
-	AccessCode string `toml:"access_token"`
+type endpoint struct {
+	Name string
+	URL  string
 }
 
-//Read a file to be used
-func Read() {
-	var config tomlConfig
+//GetEndpoints reads the endpoints from the config.toml file and returns them
+func (r *endpointResponse) GetEndpoints(n string) {
+	setupViper()
 
-	if _, err := toml.DecodeFile("./config.toml", &config); err != nil {
-		fmt.Println(err)
+	endpoints := viper.GetStringMapStringSlice(n + ".endpoints")
+
+	for name, url := range endpoints {
+		e := endpoint{
+			Name: name,
+			URL:  url[0],
+		}
+
+		fmt.Printf("Endpoint: %v", e)
+		r.Endpoints = append(r.Endpoints, e)
 	}
-
-	fmt.Printf("%s\n", config.Title)
-	fmt.Printf("Code: %s\n", config.Endpoints.Code)
-	fmt.Printf("Access code: %s\n", config.Endpoints.AccessCode)
 }
 
-func check(err error) {
+func setupViper() {
+	viper.SetConfigName("config")
+	viper.AddConfigPath(".")
+	err := viper.ReadInConfig()
+
 	if err != nil {
 		panic(err)
 	}

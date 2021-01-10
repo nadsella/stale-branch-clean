@@ -1,10 +1,7 @@
 package main
 
 import (
-	"fmt"
-	"log"
-	"net/http"
-	"os"
+	"stale-branch-clean/config"
 )
 
 func main() {
@@ -15,13 +12,12 @@ func main() {
 	//add skip message to log if branch doesn't need deleting
 	//write go test for testing this
 
-	l, err := auth()
+	config.GetEndpoints("bitbucket")
 
-	if err != nil {
-		log.Fatalln(err)
-	}
+	// if err != nil {
+	// 	log.Fatalln(err)
+	// }
 
-	fmt.Printf("%v", l)
 	// resp, err := http.Get("https://httpbin.org/get")
 
 	// if err != nil {
@@ -39,33 +35,31 @@ func main() {
 	// log.Println(string(body))
 }
 
-func auth() (bool, error) {
-	g := os.Getenv("GITHUB_USERNAME")
-	api := fmt.Sprintf("%s/%s", "https://api.github.com/users", g)
+// func auth() (bool, error) {
 
-	req, err := http.NewRequest("GET", api, nil)
+// 	req, err := http.NewRequest("GET", api, nil)
 
-	if err != nil {
-		log.Fatalln(err)
-		return false, nil
-	}
+// 	if err != nil {
+// 		log.Fatalln(err)
+// 		return false, nil
+// 	}
 
-	//basic auth with personal token
-	req.SetBasicAuth(g, os.Getenv("STALE_BRANCH_TOKEN"))
+// 	//basic auth with personal token
+// 	req.SetBasicAuth(g, os.Getenv("STALE_BRANCH_TOKEN"))
 
-	resp, err := http.DefaultClient.Do(req)
+// 	resp, err := http.DefaultClient.Do(req)
 
-	if err != nil {
-		log.Fatalln(err)
-		return false, nil
-	}
+// 	if err != nil {
+// 		log.Fatalln(err)
+// 		return false, nil
+// 	}
 
-	defer resp.Body.Close()
+// 	defer resp.Body.Close()
 
-	if err != nil {
-		log.Fatalln(err)
-		return false, nil
-	}
+// 	if err != nil {
+// 		log.Fatalln(err)
+// 		return false, nil
+// 	}
 
-	return true, nil
-}
+// 	return true, nil
+// }
