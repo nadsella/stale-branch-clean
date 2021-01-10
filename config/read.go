@@ -2,31 +2,31 @@ package config
 
 import (
 	"fmt"
-	"io/ioutil"
 
 	"github.com/BurntSushi/toml"
 )
 
 type tomlConfig struct {
+	Title     string
+	Endpoints endpoints
+}
+
+type endpoints struct {
 	Code       string
-	AccessCode string
+	AccessCode string `toml:"access_token"`
 }
 
 //Read a file to be used
 func Read() {
-	//read file into variable
-	dat, err := ioutil.ReadFile("./config.toml")
+	var config tomlConfig
 
-	check(err)
-
-	var d tomlConfig
-
-	if _, err := toml.Decode(string(dat), &d); err != nil {
-		check(err)
+	if _, err := toml.DecodeFile("./config.toml", &config); err != nil {
+		fmt.Println(err)
 	}
 
-	fmt.Print(string(d.AccessCode))
-	fmt.Print(string(d.Code))
+	fmt.Printf("%s\n", config.Title)
+	fmt.Printf("Code: %s\n", config.Endpoints.Code)
+	fmt.Printf("Access code: %s\n", config.Endpoints.AccessCode)
 }
 
 func check(err error) {
