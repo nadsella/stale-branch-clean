@@ -2,6 +2,7 @@ package config
 
 import (
 	"fmt"
+	"log"
 
 	"github.com/spf13/viper"
 )
@@ -41,6 +42,6 @@ func setupViper() {
 	err := viper.ReadInConfig()
 
 	if err != nil {
-		panic(err)
+		log.Fatal(err)
 	}
 }
