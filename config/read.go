@@ -6,7 +6,7 @@ import (
 	"github.com/spf13/viper"
 )
 
-type endpointResponse struct {
+type EndpointResponse struct {
 	Endpoints endpoint
 }
 
@@ -16,9 +16,10 @@ type endpoint struct {
 }
 
 // GetEndpoints reads the endpoints from the config.toml file and returns them
-func (r *endpointResponse) GetEndpoints(n string) {
+func GetEndpoints(n string) (EndpointResponse, error) {
 	setupViper()
 
+	r := EndpointResponse{}
 	endpoints := viper.GetStringMapStringSlice(n + ".endpoints")
 
 	for name, url := range endpoints {
@@ -30,6 +31,8 @@ func (r *endpointResponse) GetEndpoints(n string) {
 		fmt.Printf("Endpoint: %v", e)
 		r.Endpoints = e
 	}
+
+	return r, nil
 }
 
 func setupViper() {

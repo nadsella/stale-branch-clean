@@ -1,5 +1,11 @@
 package main
 
+import (
+	"fmt"
+	"log"
+	"stale-branch-clean/config"
+)
+
 func main() {
 	//get list of repositories
 	//loop through them
@@ -8,52 +14,12 @@ func main() {
 	//add skip message to log if branch doesn't need deleting
 	//write go test for testing this
 
-	// if err != nil {
-	// 	log.Fatalln(err)
-	// }
+	//fot now we just want to grab endpoints available for bb
+	endpoints, err := config.GetEndpoints("bitbucket")
 
-	// resp, err := http.Get("https://httpbin.org/get")
+	if err != nil {
+		log.Fatal(err)
+	}
 
-	// if err != nil {
-	// 	log.Fatalln(err)
-	// }
-
-	// defer resp.Body.Close()
-
-	// body, err := ioutil.ReadAll(resp.Body)
-
-	// if err != nil {
-	// 	log.Fatalln(err)
-	// }
-
-	// log.Println(string(body))
+	fmt.Printf("%v", endpoints)
 }
-
-// func auth() (bool, error) {
-
-// 	req, err := http.NewRequest("GET", api, nil)
-
-// 	if err != nil {
-// 		log.Fatalln(err)
-// 		return false, nil
-// 	}
-
-// 	//basic auth with personal token
-// 	req.SetBasicAuth(g, os.Getenv("STALE_BRANCH_TOKEN"))
-
-// 	resp, err := http.DefaultClient.Do(req)
-
-// 	if err != nil {
-// 		log.Fatalln(err)
-// 		return false, nil
-// 	}
-
-// 	defer resp.Body.Close()
-
-// 	if err != nil {
-// 		log.Fatalln(err)
-// 		return false, nil
-// 	}
-
-// 	return true, nil
-// }
