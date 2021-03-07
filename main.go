@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"log"
+	"os"
 	"stale-branch-clean/config"
 )
 
@@ -21,5 +22,5 @@ func main() {
 		log.Fatal(err)
 	}
 
-	fmt.Printf("%v", endpoints)
+
 }
