@@ -1,9 +1,5 @@
 package main
 
-import (
-	"stale-branch-clean/config"
-)
-
 func main() {
 	//get list of repositories
 	//loop through them
@@ -11,8 +7,6 @@ func main() {
 	//if branch is older than 1 hour delete & log
 	//add skip message to log if branch doesn't need deleting
 	//write go test for testing this
-
-	config.GetEndpoints("bitbucket")
 
 	// if err != nil {
 	// 	log.Fatalln(err)

@@ -15,7 +15,7 @@ type endpoint struct {
 	URL  string
 }
 
-//GetEndpoints reads the endpoints from the config.toml file and returns them
+// GetEndpoints reads the endpoints from the config.toml file and returns them
 func (r *endpointResponse) GetEndpoints(n string) {
 	setupViper()
 
@@ -28,7 +28,7 @@ func (r *endpointResponse) GetEndpoints(n string) {
 		}
 
 		fmt.Printf("Endpoint: %v", e)
-		r.Endpoints = append(r.Endpoints, e)
+		r.Endpoints = e
 	}
 }
 
